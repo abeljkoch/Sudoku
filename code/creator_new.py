@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import random
 from collections import defaultdict
-from solver import update_locally, update_for_squares, find_range, check_truth_matrix, initiate_truth_matrix
+from solver import update_locally, update_for_squares, check_truth_matrix, initiate_truth_matrix
 
 def better_check(sudoku, truth_matrix):
     empty_sudoku_indexes = np.where(sudoku == 0)
@@ -20,7 +20,7 @@ def creator():
     sudoku = np.zeros((9,9))
     truth_matrix = np.ones((9,9,9))
     assigned_number = []
-    temp_not_to_choose = []
+    temp_not_to_choose = [[]]
 
     sudoku_indexes = np.where(sudoku == 0)
     sudoku_coordinates = list(zip(sudoku_indexes[0],  sudoku_indexes[1]))
@@ -33,7 +33,7 @@ def creator():
         col_i = cor[1]
 
         number_options = list(np.where(truth_matrix[:, row_i, col_i] == 1)[0])
-        number_options = [nr for nr in number_options if nr not in temp_not_to_choose]
+        number_options = [nr for nr in number_options if nr not in temp_not_to_choose[i]]
         random.shuffle(number_options)
 
         count_till_backtrack = len(number_options)
@@ -51,28 +51,25 @@ def creator():
                 count_till_backtrack -= 1
             else:
                 assigned_number.append(number)
-                temp_not_to_choose = []
+                i += 1
+                temp_not_to_choose.append([])
                 break
 
         if count_till_backtrack == 0:
-            print("BACKTRACK THIS BITCH")
-            print(cor)
-            print(number_options)
-            temp_not_to_choose.append(assigned_number[i-1])
+            # print("BACKTRACK THIS BITCH")
+            i -= 1
+
+            temp_not_to_choose[i].append(assigned_number[i])
+            temp_not_to_choose = temp_not_to_choose[0:-1]
             assigned_number = assigned_number[0:-1]
 
-            i -= 1
             cor = sudoku_coordinates[i]
             row_i = cor[0]
             col_i = cor[1]
             sudoku[row_i, col_i] = 0
             truth_matrix = initiate_truth_matrix(sudoku)
 
-        else:
-            i += 1
-
-        print(sudoku)
-        print(assigned_number)
+    print(sudoku)
 
 
 
