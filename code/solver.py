@@ -148,10 +148,9 @@ def solver(sudoku):
     # initate the truth matrix
     truth_matrix = initiate_truth_matrix(sudoku)
 
-    print(sudoku)
-
+    last_sudoku = []
     # keep on solving untill the whole sudoku is solved
-    while np.isnan(np.sum(sudoku)):
+    while np.sum(sudoku) < 405:
         # get the indexes of all possible options in the truth matrix
         indexes_truths = np.where(truth_matrix == 1)
         # zip indexes into coordinates
@@ -160,7 +159,6 @@ def solver(sudoku):
         cols = indexes_truths[2]
         coordinates = list(zip(frames, rows, cols))
         random.shuffle(coordinates)
-        # print(coordinates)
 
         # loop trough all coordinates
         for cor in coordinates:
@@ -175,12 +173,24 @@ def solver(sudoku):
                 truth_matrix = update_for_squares(truth_matrix)
                 break
 
-    print(sudoku)
+        if np.array_equal(last_sudoku, []):
+            pass
+        elif np.array_equal(last_sudoku, sudoku):
+            print("No single solution sudoku")
+            return sudoku
+
+        last_sudoku = np.copy(sudoku)
+
+    return sudoku
 
 
 if __name__ == "__main__":
     main_folder = os.path.normpath(os.getcwd() + os.sep + os.pardir)
     sudoku_folder = main_folder + "/examples"
     sudoku = pd.read_csv(sudoku_folder + "/test_sudoku192.csv", header=None).values
-    solver(sudoku)
+    sudoku[np.isnan(sudoku)] = 0
+    print(sudoku)
+
+    sudoku_solved = solver(sudoku)
+    print(sudoku_solved)
 

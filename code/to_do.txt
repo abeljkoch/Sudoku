@@ -1,0 +1,16 @@
+TO DO:
+
+Solver:
+- De advanced regels aanpassing:
+    --> Als een advanced regel is toegepast, moet die eigenlijk opnieuw beginnen en de rest weer checken
+    --> Nieuwe eliminatie van truth opties, betekent mogelijk nieuwe advanced toepassingen of zelfs een simpele optie
+- Sudoku's met meerdere oplossingen:
+    --> Zijn vgm geen geldige sudoku's
+    --> Dus hoeft ook niks mee gedaan te worden (wordt op dit moment nu wel opgevangen en vermeld)
+    --> Zou in dat geval nog backtracken kunnen gebruiken om de nummers in te vullen. Maar minder interessant
+    --> Een sudoku moet immers single solution based zijn, anders kan een persoon deze nooit met zekerheid oplossen
+
+Creater:
+- Gebruik backtracking om altijd tot het gespecificeerde aantal opties te komen:
+    --> Bepaal minimale opties
+    --> Zelfde structuur als creating_grid
